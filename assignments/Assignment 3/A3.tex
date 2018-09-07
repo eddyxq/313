@@ -1,0 +1,183 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.6in]{geometry}
+\usepackage{amssymb, amsmath, amsfonts, amsthm}
+\usepackage{mathpazo}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage{tikz}
+\usepackage{float}
+\usetikzlibrary{automata,positioning}
+\usepackage{fancybox, graphicx}
+
+\pagestyle{fancyplain}
+\lhead{\textbf{\NAME\ }}
+\rhead{CPSC 313, \today}
+
+\newcommand\question[2]{
+\shadowbox{
+\begin{minipage}{45em}\vspace{1ex}\textbf{Problem #1}
+\newline
+\vspace{1ex}
+\end{minipage}
+}
+\vspace{1ex}
+}
+
+\begin{document}
+\linespread{0.9}
+\newcommand\NAME{Eddy Qiang}
+\question{1}{John X and Jane Y}
+\begin{enumerate}
+
+%Exercise 1
+\item 
+It appears that the TM M will accept strings that end with 01 or strings that has one or more repeating 1's, i.e 1, 11, 111,... = 1\textsuperscript{+}. Therefore L would accept the strings that are not accepted by M and reject the strings M can accept. So we have: 
+
+L = \{w \in \Sigma\textsuperscript{*}\text{ }|\text{w does not contain 1\textsuperscript{+} and does not end with 01 \}}
+
+\end{enumerate}
+\newpage
+
+\question{2}{John X and Jane Y} % add your collaborators here.
+
+% begin your solution here
+\begin{enumerate}
+
+%Exercise 2
+\item Here is the solution for part a:
+\newline
+\newline
+To show L\textsubscript{a} is in RE we need to give a TM M that recognizes it. Let M be:
+\newline
+\newline
+M = "on input  $\langle M, x\textsubscript{1},x\textsubscript{2} \rangle$ where M is a TM and x\textsubscript{1},x\textsubscript{2} are strings
+\newline
+1. Simulate two copies of M on x\textsubscript{1},x\textsubscript{2}, taking turns simulating one step for each copy of M at a time. 
+\newline
+2. As soon as one of the copies of M halts, accept $\langle M, x\textsubscript{1},x\textsubscript{2} \rangle$
+\newline
+\newline
+This answer is correct because we can definitely accept when M halts. By running two copies at the same time will allow us to satisfy the or conditional and accept when either one of the is halted on. 
+
+\item Here is the solution for part b:
+\newline
+\newline
+To show L\textsubscript{b} is in DEC we need to give a TM M that decides it. Let M be:
+\newline
+\newline
+M = "on input $\langle M, x\rangle$ where M is a TM and x is a string
+\newline 
+1. Simulate M on x
+\newline 
+2. Run it for 2\textsuperscript{$|x|$}+1 steps
+\newline
+If M halts before step 2\textsuperscript{$|x|$}, reject
+\newline
+If M halts at step 2\textsuperscript{$|x|$} step, accept
+\newline
+If M does not halts at step 2\textsuperscript{$|x|$} step, reject
+\newline
+\newline
+This answer is correct because since we are running it for a finite number of steps (2\textsuperscript{$|x|$}+1), it will halt either before it reaches the end, or when it reaches the end. So if it halts before that we reject, and at exactly that many steps, we accept. And if it goes past that into the last step, we reject.
+\end{enumerate}
+\newpage
+
+\question{3}{John X and Jane Y} % add your collaborators here.
+
+% begin your solution here
+\begin{enumerate}
+
+%Exercise 3
+Let M\textsubscript{GCD} be a TM that computes the greatest common divisor of two non-negative integers:
+\newline
+\newline 
+M\textsubscript{GCD} = "on input x
+\newline
+\newline 
+1. Check if the input is in the form 1\textsuperscript{m}\#1\textsuperscript{n}. Read the input from left to right until it reaches \#, then continue reading until a blank. If there wasn't exactly one \# and if anything other than a 1 was read before and after the \#, reject.  
+\newline
+\newline
+2. Split the tape into two tapes delimited by the \#, then replace the \# with a blank. Check for the larger input by scanning from the beginning of each tape, marking off a 1 and moving one position right until you reach a blank. The first tape to reach a blank has the smaller input, we'll put this tap on the bottom, calling it the bottom tape, and the tape the top tape. 
+\newline 
+\newline
+3. Start from the beginning of the bottom tape and repeat:
+\newline
+\newline
+i) Check for uncrossed 1's on both tapes. 
+\newline
+\newline
+ii) If there is a 1 on both tapes, cross them off and move right one spot, go back to step i.
+\newline 
+\newline
+iii) If bottom tape reaches a blank, replace the crossed out 1's in the top tape with blanks, and uncross the 1's in the bottom tape. Go back to step i.
+\newline 
+\newline
+iv) If top tape reaches a blank and the bottom tape reaches a 1, uncross the 1's on the tapes then swap the tapes so top is bottom and bottom is top. Go back to step i.
+\newline
+\newline
+v) If the bottom tape still have 1's and the top tape is all blank, return.
+\newline
+\newline
+4) What's left on the bottom tape is the return value, i.e. 1\textsuperscript{gcd(m,n)}.
+
+
+
+
+
+\end{enumerate}
+\newpage
+
+\question{4}{John X and Jane Y} % add your collaborators here.
+
+% begin your solution here
+\begin{enumerate}
+
+%Exercise 4
+The description of the language that encapsulates the problem is:
+\newline
+\newline
+REVERSEACCEPT = \{$\langle M\rangle$ \text{}$|$\text{ }$\langle M\rangle$\textsuperscript{R} $\in$ L(M) and M is a TM \}
+\newline
+\newline
+
+To prove REVERSEACCEPT is undecidable, I will assume REVERSEACCEPT is decidable for contradiction and show that A\textsubscript{TM} $\leq$\textsubscript{m} REVERSEACCEPT.
+\newline
+\newline
+We need to satisfy the two conditions:
+\newline
+\newline
+1. If $\langle M, w \rangle$ $\in$ A\textsubscript{TM} then $\langle M' \rangle$ $\in$ REVERSEACCEPT.
+\newline
+2. If $\langle M, w \rangle$ $\notin$ A\textsubscript{TM} then $\langle M' \rangle$ $\notin$ REVERSEACCEPT.
+\newline
+\newline
+with our computable reduction algorithm f(x). Here is the reduction:
+\newline
+\newline
+Given $\langle M, w \rangle$ we we construct M':
+\newline
+\newline
+M' = "on input x
+\newline
+1. Simulate M on w
+\newline
+2. If M accepts w, accept all x
+\newline
+3. If M rejects w, reject all x
+\newline
+\newline
+Output:  $\langle M'\rangle$
+\newline
+\newline
+Proof of correctness:
+\newline
+Assume $\langle M, w \rangle$ $\in$ A\textsubscript{TM}. This means that M accepts w. So by line 2 in the description of M' will always accept all x. Since $\langle M' \rangle$\textsuperscript{R} $\in$ L(M') therefore $\langle M' \rangle$ $\in$ REVERSEACCEPT.
+\newline
+Assume $\langle M, w \rangle$ $\notin$ A\textsubscript{TM}. This means that M rejects w. So by line 3 in the description of M' will always reject all x. Since $\langle M' \rangle$\textsuperscript{R} $\notin$ L(M') therefore $\langle M' \rangle$ $\notin$ REVERSEACCEPT.
+\newline
+\newline
+So we have reduced A\textsubscript{TM} to REVERSEACCEPT, showing that A\textsubscript{TM} is decidable. Since A\textsubscript{TM} is undecidable, we get a contradiction and therefore REVERSEACCEPT is undecidable.
+\end{enumerate}
+\newpage
+\end{document}
